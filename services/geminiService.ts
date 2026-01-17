@@ -42,14 +42,6 @@ export const generateResponse = async (
     const modelId = 'gemini-3-flash-preview';
     const systemInstruction = getSystemInstruction(mode, language);
 
-    // Filter out the last message from history as we will add it to the current call contents
-    // or just use history for context if chat object is preferred.
-    // However, specifically for the SDK rules, let's use generateContent with the full context + instruction
-    
-    // Construct the contents array based on history + current new prompt
-    // Note: The history passed from component already includes the latest user message
-    // We just need to ensure the system instruction is passed in config.
-    
     const contents = history; 
 
     const response = await ai.models.generateContent({
@@ -62,10 +54,18 @@ export const generateResponse = async (
     });
 
     return response.text || (language === 'ru' ? "Не удалось получить ответ." : "No response generated.");
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini API Error:", error);
+    
+    // Handle region restriction error
+    if (error.message?.includes("User location") || error.toString().includes("User location")) {
+      return language === 'ru' 
+        ? "🚫 Ошибка доступа: Ваш регион не поддерживается. Google Gemini API заблокирован в некоторых странах. Пожалуйста, включите VPN (США, Европа) и попробуйте снова." 
+        : "🚫 Access Error: Your location is not supported. Please enable a VPN (US/Europe) and try again.";
+    }
+
     return language === 'ru' 
-      ? "Произошла ошибка при обращении к ИИ." 
-      : "Sorry, I encountered an error connecting to the AI.";
+      ? "Произошла ошибка при обращении к ИИ. Проверьте соединение или VPN." 
+      : "Sorry, I encountered an error connecting to the AI. Check your connection or VPN.";
   }
 };

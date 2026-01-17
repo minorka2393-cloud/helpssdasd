@@ -215,7 +215,8 @@ export const Workspace: React.FC<WorkspaceProps> = ({ activeTask, language, onBa
       </div>
 
       {/* Chat Area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 bg-slate-50/50 dark:bg-slate-950/50 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
+      {/* Increased bottom padding to accommodate raised input on mobile */}
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 md:p-8 pb-40 md:pb-32 space-y-8 bg-slate-50/50 dark:bg-slate-950/50 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center max-w-3xl mx-auto animate-fade-in">
             <div className="text-center mb-6 md:mb-10 px-4">
@@ -359,11 +360,11 @@ export const Workspace: React.FC<WorkspaceProps> = ({ activeTask, language, onBa
             </div>
           </div>
         )}
-        <div className="h-4"></div> {/* Spacer */}
       </div>
 
       {/* Floating Input Area */}
-      <div className="absolute bottom-0 left-0 right-0 p-3 md:p-6 bg-gradient-to-t from-white via-white/90 to-transparent dark:from-slate-950 dark:via-slate-950/90 pointer-events-none transition-colors duration-300 z-30">
+      {/* Added extra padding bottom (pb-8) to lift the bar above mobile home indicator */}
+      <div className="absolute bottom-0 left-0 right-0 px-3 pt-3 pb-8 md:p-6 bg-gradient-to-t from-white via-white/90 to-transparent dark:from-slate-950 dark:via-slate-950/90 pointer-events-none transition-colors duration-300 z-30">
         <div className="pointer-events-auto max-w-4xl mx-auto">
            {selectedImage && (
             <div className="animate-slide-up mb-2 inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-indigo-100 dark:border-slate-700 shadow-lg px-3 py-1.5 rounded-xl">
